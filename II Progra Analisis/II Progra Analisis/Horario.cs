@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace II_Progra_Analisis
 {
-    class Aulas
+    class Horario
     {
-        public Cursos cursoActual { get; set; }
-        public int horas { get; set; }
-        public bool ocupado { get; set; }
+        public List<Cursos>[,] matriz = new List<Cursos>[5,6];//Matriz dia x hora
+        
+        //tamaño6 cursos por lashoras
 
     }
 }
