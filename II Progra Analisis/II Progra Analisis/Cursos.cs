@@ -17,9 +17,19 @@ namespace II_Progra_Analisis
         public Profes profe { get; set; }
         public int grupo { get; set; }
 
-        public Cursos(int ID, String nombre)
+        public Cursos(int ID, int nEstudiantes, String nombre, Aulas aula, int horas,int semestre,Profes profe,int grupo)
         {
             this.ID = ID;
+            this.nEstudiantes = nEstudiantes;
+            this.nombre = nombre;
+            this.aula = aula;
+            this.horas = horas;
+            this.semestre = semestre;
+            this.profe = profe;
+            this.grupo = grupo;
+        }
+        public Cursos(String nombre)
+        {
             this.nombre = nombre;
         }
     }
