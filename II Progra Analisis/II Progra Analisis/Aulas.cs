@@ -8,5 +8,9 @@ namespace II_Progra_Analisis
 {
     class Aulas
     {
+        public Cursos cursoActual { get; set; }
+        public int horas { get; set; }
+        public bool ocupado { get; set; }
+
     }
 }
