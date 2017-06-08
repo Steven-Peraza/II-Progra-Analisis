@@ -13,13 +13,13 @@ namespace PMX
             int[] p1 = new int[10];
             int[] p2 = new int[10];
 
-            int[] p3 = { 2, 3, 0, 5,4,1,6,8,9,7};
-            int[] p4 = { 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+            int[] p3 = { 2, 3, 0, 5, 4, 1, 6, 8, 9, 7};
+            int[] p4 = { 7, 7, 1, 6, 3, 4, 9, 5, 8, 2 };
 
 
             //llenarArreglo(p1,p2);
 
-            for (int i = 0; i < p1.Length; i++)
+            /*for (int i = 0; i < p1.Length; i++)
             {
                 Console.Write(p3[i]+" ");
             }
@@ -28,9 +28,9 @@ namespace PMX
             {
                 Console.Write(p4[i]+" ");
             }
-            Console.WriteLine("");
+            Console.WriteLine("");*/
 
-
+            generachons(p3, p4, 0);
 
             Console.ReadKey();
         }
@@ -59,13 +59,9 @@ namespace PMX
             List<int> x = new List<int>();
             List<int> y = new List<int>();
             int index,aux,hostia;
-
-            /*for (int i = 0; i < 10; i++)
-            {*/
                 for (int j = punto1; j < punto2; j++)
                 {
                     h1[j] = p1[j];
-                    //h2[j] = p2[j];
                 }
                 for (int v = punto1; v < punto2; v++)
                 {
@@ -77,16 +73,26 @@ namespace PMX
                         y.Add(h1[v]);
                     }
                 }/////
-                for (int n = 0; n < p1.Length; n++)
+            /*Console.WriteLine("----------------------------");
+            for (int n = 0; n < p1.Length; n++)
                 {
                     Console.Write(h1[n] + " ");
                 }
                 Console.WriteLine("");
-                /////
+                /////*/
                 for (int c = 0; c < y.Count; c++)
                 {
                     hostia = Array.IndexOf(p2, y[c]);
-                    if(h1[hostia] == 0)
+                    //Console.WriteLine(hostia);
+                    if(hostia == -1)
+                    {
+                    hostia = Array.IndexOf(p2, h1[0]);
+                    //pequenya mutacion
+                    h1[y[c]] = p2[x[c]];
+                    //continue;
+                    }
+
+                    else if(h1[hostia] == 0)
                         h1[hostia] = p2[x[c]];
                     else
                     {
@@ -102,19 +108,46 @@ namespace PMX
                         h1[X] = p1[X];
                     }
                 }
-            //}
-
-            for (int i = 0; i < p1.Length; i++)
-            {
-                Console.Write(h1[i] + " ");
-            }
-            Console.WriteLine("");
+            //Console.WriteLine("----------------------------");
             /*for (int i = 0; i < h1.Length; i++)
             {
                 Console.Write(h1[i] + " ");
             }
             Console.WriteLine("");*/
+
             return h1;
+        }
+
+        private static void generachons(int[] j1, int[] j2, int veces)
+        {
+            int[] aux = new int[10];
+            aux = j1;
+            if (veces == 10)
+            {
+                Console.WriteLine("Fin de las generaciones");
+                return;
+            }
+
+            else
+            {
+                j1 = PMX(j2, aux);
+                j2 = PMX(aux, j2);
+            }
+
+            Console.WriteLine("Generacion: "+veces);
+            for (int i = 0; i < j1.Length; i++)
+            {
+                Console.Write(j1[i] + " ");
+            }
+            Console.WriteLine("");
+
+            for (int i = 0; i < j1.Length; i++)
+            {
+                Console.Write(j2[i] + " ");
+            }
+            Console.WriteLine("");
+            veces++;
+            generachons(j1, j2, veces);
         }
     }
 }
