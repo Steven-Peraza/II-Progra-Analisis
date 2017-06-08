@@ -12,18 +12,18 @@ namespace II_Progra_Analisis
         public int nEstudiantes { get; set; }
         public String nombre { get; set; }
         public Aulas aula { get; set; }
-        public int horas { get; set; }
+        public int nClases { get; set; }
         public int semestre { get; set; }
         public Profes profe { get; set; }
         public int grupo { get; set; }
 
-        public Cursos(int ID, int nEstudiantes, String nombre, Aulas aula, int horas,int semestre,Profes profe,int grupo)
+        public Cursos(int ID, int nEstudiantes, String nombre, Aulas aula, int nClases,int semestre,Profes profe,int grupo)
         {
             this.ID = ID;
             this.nEstudiantes = nEstudiantes;
             this.nombre = nombre;
             this.aula = aula;
-            this.horas = horas;
+            this.nClases = nClases;
             this.semestre = semestre;
             this.profe = profe;
             this.grupo = grupo;

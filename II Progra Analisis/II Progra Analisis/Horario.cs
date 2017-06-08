@@ -10,10 +10,10 @@ namespace II_Progra_Analisis
     {
         public Cursos[,] matriz = new Cursos[5,6];//Matriz dia x hora
         public List<Cursos> cursos = new List<Cursos>();
-        //tamaño6 cursos por lashoras
 
-        public void llenaHorario()
+        public void llenaHorario()//Pasa la lista de cursos a matriz referenciado a las horas y los dias
         {
+            cursos = DesordenarLista(cursos);
             int cont = 0;
             for (int i = 0; i < 5; i++)
             {
@@ -21,9 +21,9 @@ namespace II_Progra_Analisis
                 {
                     Cursos cursoActual = cursos[cont];
                     matriz[i, k] = cursoActual;
-                    if (cursos[cont].horas == 2)
+                    if (cursos[cont].nClases == 2)
                     {
-                        Cursos cursoAux = new Cursos(cursoActual.ID, cursoActual.nEstudiantes, cursoActual.nombre, null, cursoActual.horas, cursoActual.semestre, null, cursoActual.grupo);
+                        Cursos cursoAux = new Cursos(cursoActual.ID, cursoActual.nEstudiantes, cursoActual.nombre, null, cursoActual.nClases, cursoActual.semestre, null, cursoActual.grupo);
                         k += 1;
                         if (k == 6)
                         {
@@ -40,6 +40,20 @@ namespace II_Progra_Analisis
 
                 }
             }
+        }
+        public List<Cursos> DesordenarLista(List<Cursos> input)
+        {
+            List<Cursos> arr = input;
+            List<Cursos> arrDes = new List<Cursos>();
+
+            Random randNum = new Random();
+            while (arr.Count > 0)
+            {
+                int val = randNum.Next(0, arr.Count - 1);
+                arrDes.Add(arr[val]);
+                arr.RemoveAt(val);
+            }
+            return arrDes;
         }
     }
 }
