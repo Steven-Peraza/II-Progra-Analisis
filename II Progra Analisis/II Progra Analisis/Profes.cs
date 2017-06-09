@@ -13,5 +13,12 @@ namespace II_Progra_Analisis
         public int horas { get; set; }
         public int maxHoras = 22;
         public List<Cursos> cursosImpartidos { get; set; }
+
+        public Profes(int ID,String nombre, int horas)
+        {
+            this.ID = ID;
+            this.nombre = nombre;
+            this.horas = horas;
+        }
     }
 }
