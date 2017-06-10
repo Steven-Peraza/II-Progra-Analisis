@@ -216,6 +216,7 @@ namespace II_Progra_Analisis
             Horario p1 = new Horario();
             Horario p2 = new Horario();
             Horario h1 = new Horario();
+            Horario h2 = new Horario();
             List<Cursos> l1 = new List<Cursos>();
             List<Cursos> l2 = new List<Cursos>();
             
@@ -225,6 +226,7 @@ namespace II_Progra_Analisis
                 l1.Add(listaHorarios[0].cursos[i]);
                 l2.Add(listaHorarios[0].cursos[i]);
                 h1.cursos.Add(listaHorarios[0].cursos[i]);
+                h2.cursos.Add(listaHorarios[0].cursos[i]);
             }
 
             p1.cursos = l1;
@@ -252,6 +254,7 @@ namespace II_Progra_Analisis
             Console.WriteLine("-------------------------------------------Prueba PMX-------------------------------------");
             
             int[] pruebaPMX = PMX2(pruebaP1,pruebaP2);
+            int[] pruebaPMX2 = PMX2(pruebaP2, pruebaP1);
             for (int i = 0; i < pruebaPMX.Length; i++)
             {
                 foreach (Cursos c in listaHorarios[0].lecciones)
@@ -260,9 +263,18 @@ namespace II_Progra_Analisis
                         h1.lecciones.Add(c);
                 }
             }
+            for (int i = 0; i < pruebaPMX2.Length; i++)
+            {
+                foreach (Cursos c in listaHorarios[0].lecciones)
+                {
+                    if (c.nleccion == pruebaPMX2[i])
+                        h2.lecciones.Add(c);
+                }
+            }
             Console.WriteLine(h1.lecciones.Count);
             //h1.llenaHorario();
             listaHorariosPMX.Add(h1);
+            listaHorariosPMX.Add(h2);
             /*for (int i = 0; i < prueba1.Length; i++)
             {
                 Console.Write(prueba1[i]+"-");
@@ -290,7 +302,24 @@ namespace II_Progra_Analisis
                 Console.WriteLine("-------------------------cambio semestre-------------------------");
             }
             Console.WriteLine("-------------------------------------------Prueba Simple-------------------------------------");
+
             Tuple<int[],int[]> pruebaSimple = CruceSimple(pruebaP1, pruebaP2);
+            for (int i = 0; i < pruebaSimple.Item1.Length; i++)
+            {
+                foreach (Cursos c in listaHorarios[0].lecciones)
+                {
+                    if (c.nleccion == pruebaPMX[i])
+                        h1.lecciones.Add(c);
+                }
+            }
+            for (int i = 0; i < pruebaSimple.Item2.Length; i++)
+            {
+                foreach (Cursos c in listaHorarios[0].lecciones)
+                {
+                    if (c.nleccion == pruebaPMX2[i])
+                        h2.lecciones.Add(c);
+                }
+            }
             Console.WriteLine();
             Console.ReadKey();
         }
