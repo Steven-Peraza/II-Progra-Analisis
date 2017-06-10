@@ -8,7 +8,54 @@ namespace II_Progra_Analisis
 {
     class Program
     {
-        private static int[] PMX2(int[] p1, int[] p2)
+        public static Tuple<int[], int[]> CruceSimple(int[] p1, int[] p2)
+        {
+
+            Tuple<int[], int[]> hijos = C1P(p1, p2);
+
+            Console.WriteLine("Hijo 1 : ");
+            for (int i = 0; i < p1.Length; i++)
+            {
+                Console.Write(hijos.Item1[i] + " ");
+            }
+            Console.WriteLine(" ");
+            Console.WriteLine("Hijo 2 : ");
+            for (int i = 0; i < p2.Length; i++)
+            {
+                Console.Write(hijos.Item2[i] + " ");
+            }
+
+            return hijos;
+
+        }
+
+        static Tuple<int[], int[]> C1P(int[] pa1, int[] ma1)
+        {
+            Random rnd = new Random();
+            int puntoCX = rnd.Next(0, 9);
+            Console.WriteLine("Punto de cruce: " + puntoCX);
+            int[] h1 = new int[pa1.Length];
+            int[] h2 = new int[ma1.Length];
+
+
+            for (int i = 0; i < h1.Length; i++)
+            {
+                if (i > puntoCX)
+                {
+                    h1[i] = ma1[i];
+                    h2[i] = pa1[i];
+                }
+                else
+                {
+                    h1[i] = pa1[i];
+                    h2[i] = ma1[i];
+                }
+            }
+            Tuple<int[], int[]> hijos = new Tuple<int[], int[]>(h1, h2);
+            return hijos;
+        }
+    
+    private static int[] PMX2(int[] p1, int[] p2)
         {
             Random rnd = new Random();
             int punto1 = rnd.Next(0, p1.Length);
@@ -45,13 +92,13 @@ namespace II_Progra_Analisis
                 //Console.WriteLine(hostia);
                 hostia = Array.IndexOf(p2, y[c]);
                 //Console.WriteLine(hostia);
-                /*if (hostia == -1)
+                if (hostia == -1)
                 {
                     hostia = Array.IndexOf(p2, h1[0]);
                     //pequenya mutacion
                     h1[y[c]] = p2[x[c]];
                     //continue;
-                }*/
+                }
 
                 if (h1[hostia] == 0)
                     h1[hostia] = p2[x[c]];
@@ -78,99 +125,7 @@ namespace II_Progra_Analisis
 
             return h1;
         }
-        /*public static Cursos[] PMX(List<Cursos> c1, List<Cursos> c2)
-        {
-            Cursos[] p1 = new Cursos[c1.Count];
-            Cursos[] p2 = new Cursos[c2.Count];
-            Console.WriteLine(c1.Count);
-            Console.WriteLine(c2.Count);
-            for (int i = 0; i < c1.Count; i++)
-            {
-                p1[i] = c1[i];
-                p2[i] = c2[i];
-            }
-            Cursos [] h1 = new Cursos[p1.Length];
-            for (int i = 0; i < h1.Length; i++)
-            {
-                h1[i] = null;
-            }
-            Random rnd = new Random();
-            int punto1 = rnd.Next(0, p1.Length);
-            int punto2 = rnd.Next(punto1 + 1, p2.Length);
-            punto1 = (3);
-            punto2 = (7);
-            List<int> x = new List<int>();
-            List<Cursos> y = new List<Cursos>();
-            int index, aux, hostia;
-            for (int j = punto1; j < punto2; j++)
-            {
-                h1[j] = p1[j];
-            }
-            for (int v = punto1; v < punto2; v++)
-            {
-                index = Array.IndexOf(h1, p2[v]);
-                aux = Array.IndexOf(p2, p2[v]);
-                if (index == -1)
-                {
-                    x.Add(aux);
-                    y.Add(h1[v]);
-                }
-            }/////
-             /*Console.WriteLine("----------------------------");
-             for (int n = 0; n < p1.Length; n++)
-                 {
-                     Console.Write(h1[n] + " ");
-                 }
-                 Console.WriteLine("");
-                 /////
-            for (int c = 0; c < y.Count; c++)
-            {
-                Cursos auxC = y[c];
-                hostia = Array.IndexOf(p2, y[c]);// busca en p2 el valor de y & se asigna el indice de este
-                //while (true)
-                //{
-                    Console.WriteLine(hostia);
-                    if (hostia == -1)
-                    {
-                        hostia = Array.IndexOf(p2, h1[0]);
-                        //pequenya mutacion
-                        h1[y.IndexOf(y[c])] = p2[x[c]];
-
-                        //continue;
-                    }
-                    //Console.WriteLine(hostia);
-                    else if (h1[hostia] == null)
-                    {
-                        h1[hostia] = p2[x[c]];
-                        //break;
-                    }
-                        
-                    else
-                    {
-                        //z.Add(h1[hostia]);
-                        hostia = Array.IndexOf(p2, h1[hostia]);// pasa a ser el indice del valor opuesto a el valor en p2
-                        //auxC = h1[hostia];
-                        //hostia = Array.IndexOf(p2, h1[hostia]);
-                    }
-                //}
-               
-            }
-            for (int X = 0; X < h1.Length; X++)
-            {
-                if (h1[X] == null)
-                {
-                    h1[X] = p1[X];
-                }
-            }
-            /*Console.WriteLine("----------------------------");
-            for (int i = 0; i < h1.Length; i++)
-            {
-                Console.Write(h1[i] + " ");
-            }
-            Console.WriteLine("");
-
-            return h1;
-        }*/
+        
         static void Main(string[] args)
         {
             Random rnd = new Random();
@@ -269,6 +224,7 @@ namespace II_Progra_Analisis
             {
                 l1.Add(listaHorarios[0].cursos[i]);
                 l2.Add(listaHorarios[0].cursos[i]);
+                h1.cursos.Add(listaHorarios[0].cursos[i]);
             }
 
             p1.cursos = l1;
@@ -285,26 +241,29 @@ namespace II_Progra_Analisis
             p2.DesordenarLista();
             listaHorariosPMX.Add(p2);
 
-            int []prueba1 = new int [p1.lecciones.Count];
-            int[] prueba2 = new int[p1.lecciones.Count];
+            int []pruebaP1 = new int [p1.lecciones.Count];
+            int[] pruebaP2 = new int[p1.lecciones.Count];
             for (int i = 0; i < p1.lecciones.Count; i++)
             {
-                prueba1[i] = p1.lecciones[i].nleccion;
-                prueba2[i] = p2.lecciones[i].nleccion;
+                pruebaP1[i] = p1.lecciones[i].nleccion;
+                pruebaP2[i] = p2.lecciones[i].nleccion;
             }
+            
             Console.WriteLine("-------------------------------------------Prueba PMX-------------------------------------");
-            /*Cursos[] prueba = PMX(p1.lecciones,p2.lecciones);
-            List<Cursos> c = new List<Cursos>();
-            for (int i = 0; i < prueba.Length; i++)
+            
+            int[] pruebaPMX = PMX2(pruebaP1,pruebaP2);
+            for (int i = 0; i < pruebaPMX.Length; i++)
             {
-                c.Add(prueba[i]);
+                foreach (Cursos c in listaHorarios[0].lecciones)
+                {
+                    if (c.nleccion == pruebaPMX[i])
+                        h1.lecciones.Add(c);
+                }
             }
-            h1.cursos = p1.cursos;
-            h1.lecciones = c;
-            h1.llenaHorario();
-            listaHorariosPMX.Add(h1);*/
-            int[] prueba = PMX2(prueba1,prueba2);
-            for (int i = 0; i < prueba1.Length; i++)
+            Console.WriteLine(h1.lecciones.Count);
+            //h1.llenaHorario();
+            listaHorariosPMX.Add(h1);
+            /*for (int i = 0; i < prueba1.Length; i++)
             {
                 Console.Write(prueba1[i]+"-");
             }
@@ -319,7 +278,9 @@ namespace II_Progra_Analisis
                 Console.Write(prueba[i] + "-");
             }
             Console.WriteLine();
-            /*foreach (Horario h in listaHorariosPMX)
+            */
+
+            foreach (Horario h in listaHorariosPMX)
             {
                 foreach (Cursos cur in h.lecciones)
                 {
@@ -327,7 +288,10 @@ namespace II_Progra_Analisis
                 }
                 Console.WriteLine();
                 Console.WriteLine("-------------------------cambio semestre-------------------------");
-            }*/
+            }
+            Console.WriteLine("-------------------------------------------Prueba Simple-------------------------------------");
+            Tuple<int[],int[]> pruebaSimple = CruceSimple(pruebaP1, pruebaP2);
+            Console.WriteLine();
             Console.ReadKey();
         }
     }
