@@ -29,49 +29,63 @@ namespace II_Progra_Analisis
 
         }
 
+        //Funcion que cruza en un solo punto a dos listas de enteros
         static Tuple<int[], int[]> C1P(int[] pa1, int[] ma1)
         {
+            //se crea el random para determinar un punto aleatorio de cruce
             Random rnd = new Random();
             int puntoCX = rnd.Next(0, 9);
             Console.WriteLine("Punto de cruce: " + puntoCX);
+            //se crean dos hijos del mismo tamanyo de los padres
             int[] h1 = new int[pa1.Length];
             int[] h2 = new int[ma1.Length];
 
-
+            //ciclo que cruza ambos padres para obtener a los hijos correspondientes.
             for (int i = 0; i < h1.Length; i++)
             {
+                //si ya se paso al punto de cruce, entonces se mezclan los padres en los hijos
                 if (i > puntoCX)
                 {
                     h1[i] = ma1[i];
                     h2[i] = pa1[i];
                 }
+                //sino, solo se copian directamente al hijo
                 else
                 {
                     h1[i] = pa1[i];
                     h2[i] = ma1[i];
                 }
             }
+            //se crea una tupla para retornar ambos hijos ya cruzados
             Tuple<int[], int[]> hijos = new Tuple<int[], int[]>(h1, h2);
             return hijos;
         }
     
+        // funcion que cruza dos padres utilizando el algoritmo PMX
     private static int[] PMX2(int[] p1, int[] p2)
         {
+            //se crea el random para determinar los puntos aleatorios de cruce
             Random rnd = new Random();
             int punto1 = rnd.Next(0, p1.Length);
             int punto2 = rnd.Next(punto1 + 1, p1.Length);
+            //porcentaje de aparicion de mutacion
+            int porcenMut = rnd.Next(1, 100);
+            //se crea la estructura del hijo
             int[] h1 = new int[p1.Length];
-            punto1 = 3;
-            punto2 = 6;
+            //Listas que ayudan al mapeo de elementos
             List<int> x = new List<int>();
             List<int> y = new List<int>();
+            //enteros que sirven para tomar indices y auxiliares
             int index, aux, hostia;
+            //se copia el segmento determinado aleatoriamente del primer padre al hijo
             for (int j = punto1; j < punto2; j++)
             {
                 h1[j] = p1[j];
             }
+            //se buscan los elementos repetidos para mapearlos dentro de las listas auxiliares "x" y "y"
             for (int v = punto1; v < punto2; v++)
             {
+                //array index of busca en el hijo (h1) el elemento de padre 2, si no lo encuentra retorna un -1, y se introduce en las listas auxiliares
                 index = Array.IndexOf(h1, p2[v]);
                 aux = Array.IndexOf(p2, p2[v]);
                 if (index == -1)
@@ -87,28 +101,33 @@ namespace II_Progra_Analisis
                  }
                  Console.WriteLine("");
                  /////*/
+
+            //se realiza el cruce basandose en los elementos mapeados
             for (int c = 0; c < y.Count; c++)
             {
-                //Console.WriteLine(hostia);
+                //se buscan los elementos mapreados en padre 2
                 hostia = Array.IndexOf(p2, y[c]);
-                //Console.WriteLine(hostia);
-                if (hostia == -1)
+                //si el porcentaje de mutacion es un numero de 5 o menor, (5 %) entonces se muta esa posicion con otro elemento ya mapeado
+                //para evitar que se pierdan o inserten datos
+                if (porcenMut <= 50)
                 {
-                    hostia = Array.IndexOf(p2, h1[0]);
                     //pequenya mutacion
+                    Console.WriteLine("Mutando el curso {0} en la posicion {1}", h1[y[c]],hostia);
                     h1[y[c]] = p2[x[c]];
-                    //continue;
+                    Console.WriteLine("A: {0} en la misma posicion", p2[x[c]]);
                 }
-
+                //en caso de que no haya mutacion, se mapea normalmente donde haya campo en el hijo (si hay 0)
                 if (h1[hostia] == 0)
                     h1[hostia] = p2[x[c]];
+                //si no hay 0, entonces esta ocupada esa posicion, entonces, se mapea el elemento en esa posicion y se realiza el cruce
                 else
                 {
-                    //z.Add(h1[hostia]);
                     hostia = Array.IndexOf(p2, h1[hostia]);
                     h1[hostia] = p2[x[c]];
                 }
             }
+
+            //luego se termina de copiar el padre en el hijo donde existan espacios vacios
             for (int X = 0; X < h1.Length; X++)
             {
                 if (h1[X] == 0)
@@ -122,7 +141,7 @@ namespace II_Progra_Analisis
                 Console.Write(h1[i] + " ");
             }
             Console.WriteLine("");*/
-
+            //se retorna el hijo cruzado
             return h1;
         }
 
@@ -352,36 +371,49 @@ namespace II_Progra_Analisis
             Console.ReadKey();
         }
 
+        //funcion que toma un horario y calcula el fitness del mismo con los estandares perfectos
         public static double Fitness(Horario hijo1)
         {
             Console.WriteLine("------------------------------------------");
+            //lista de elementos con fitness perfecto, para comparar
             double[] perfectHit = { 1.6, 1.5, 1.33333333333333333333, 1 };
             double fit = 0;
+            //datos que sirven para dividir la lista de cursos (horario) en dias separados con fitness diferentes...
             double ultimaHora = 0, primeraHora = 0, cursos = 0, hora = 7, dia = 0, hitCombo = 0;
+            //ciclo que toma todo el horario y lo recorre para aplicar la funcion fitness cada 6 elementos
             for (int i = 0; i < hijo1.lecciones.Count; i++)
             {
-                //Console.WriteLine("hora: " + hora);
+                //si el horario en esa hora no esta libre y ya hay hora de inicio de clases
                 if ((hijo1.lecciones[i].nombre != "Libre") && (primeraHora != 0) && (dia < 7))
                 {
+                    //la ulitma hora se toma
                     ultimaHora = hora;
+                    //se aumenta la cantidad de cursos del dia
                     cursos++;
                 }
+                ////si el horario en esa hora no esta libre y todavia no hay hora de inicio de clases
                 else if ((hijo1.lecciones[i].nombre != "Libre") && (primeraHora == 0) && (dia < 7))
                 {
+                    //la primera hora es tomada
                     primeraHora = hora;
                     cursos++;
                 }
+                //se aumenta la hora en 2 (2 horas por curso)
                 hora += 2;
+                //si se llego a 6 espacios de horario, entonces se ha cubierto un dia de la semana
                 if (dia == 6)
                 {
                     Console.WriteLine("Fit del dia: "+ (ultimaHora - primeraHora) / cursos);
+                    //se calcula el fitness de cada dia mediante la formula y se compara con los fitness perfectos
                     if (perfectHit.Contains((ultimaHora - primeraHora) / cursos))
                     {
+                        //si son iguales, se aumenta el "hit combo", o sea la cantidad de dias con horario perfecto
                         hitCombo++;
                         Console.WriteLine("It has been a lovely day... XD");
                     }
                     fit += (ultimaHora - primeraHora) / cursos;
                     Console.WriteLine("Fit acumulado: "+fit);
+                    //se vuelven las variables a sus estados originales para el siguiente dia
                     cursos = 0;
                     dia = 0;
                     hora = 7;
@@ -390,22 +422,27 @@ namespace II_Progra_Analisis
                 }
                 dia++;
             }
+            //si los cinco dias han tenido un horario perfecto, entonces este es el objetivo conseguido!!
             if(hitCombo == 5)
             {
-                Console.WriteLine("Horario Perfecto, la PTM!!!!");
+                Console.WriteLine("Horario Perfecto!!!!");
             }
             //Console.WriteLine("Total Fit: "+fit);
             Console.WriteLine("-------------------------");
+            //se retorna el valor de fitness obtenido a la semana
             return fit;
         }
 
+        //funcion auxiliar que recibe y envia los parametros necesarios para que la funcion fitness funciones adecuadamente
+        //recibe los dos padres y los dos hijos cruzados
         public static Tuple<Horario, Horario> fitnessAux(Horario z1, Horario z2,Horario z3, Horario z4)
         {
+            //se le saca el fitness a cada elemento (horario)
             double fitP1 = Fitness(z1);
             double fitP2 = Fitness(z2);
             double fitH1 = Fitness(z3);
             double fitH2 = Fitness(z4);
-
+            //lista auxiliar para guardar los mejores horarios 
             List<Horario> bestH = new List<Horario>();
             //Horario best2 = new Horario();
 
@@ -413,7 +450,7 @@ namespace II_Progra_Analisis
             Console.WriteLine("Fit del padre 2: " + fitP2);
             Console.WriteLine("Fit del hijo 1: "+ fitH1);
             Console.WriteLine("Fit del hijo 2: "+ fitH2);
-
+            //asinaciones para evitar problemas en ciertos casos
             if (fitH1 < 0)
                 fitH1 = 5;
             if (fitH2 < 0)
@@ -423,6 +460,7 @@ namespace II_Progra_Analisis
             if (fitP2 < 0)
                 fitP2 = 5;
 
+            //comparaciones entre todos los fitness para averiguar si los hijos o los padres, o una mezcla de ambos son los mejores horarios
             if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 >= fitH2) && (fitP2 >= fitH2))
             {
                 bestH.Add(z3);
@@ -455,7 +493,7 @@ namespace II_Progra_Analisis
                 bestH.Add(z2);
             }
 
-
+            //se crea una tupla para retornar los dos hijos mas prometedores, los demas son descartados.
             Tuple<Horario, Horario> bestGen = new Tuple<Horario, Horario>(bestH[0], bestH[1]);
             return bestGen;
         }
