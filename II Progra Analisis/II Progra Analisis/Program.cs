@@ -237,7 +237,7 @@ namespace II_Progra_Analisis
                     Console.Write(cur.ID+"-");
                 }
                 Console.WriteLine();
-                Console.WriteLine("-------------------------cambio semestre-------------------------");
+                Console.WriteLine("-------------------------PMX-------------------------");
             }
             Console.ReadKey();
         }
