@@ -82,6 +82,7 @@ namespace PMX
                 /////*/
                 for (int c = 0; c < y.Count; c++)
                 {
+                Console.WriteLine(hostia);
                     hostia = Array.IndexOf(p2, y[c]);
                     //Console.WriteLine(hostia);
                     if(hostia == -1)
