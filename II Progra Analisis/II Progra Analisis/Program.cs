@@ -320,8 +320,50 @@ namespace II_Progra_Analisis
                         h2.lecciones.Add(c);
                 }
             }
-            Console.WriteLine();
+            Console.WriteLine(" ");
+
+            Fitness(p1);
+            
             Console.ReadKey();
+        }
+
+        public static void Fitness(Horario hijo1/*, Cursos[] hijo2*/)
+        {
+            double[] perfectHit = { 1.6, 1.5, 1.33, 1 };
+            double fit = 0;
+            double ultimaHora = 0, primeraHora = 0, cursos = 0, hora = 7, dia = 0;
+            for (int i = 0; i < hijo1.lecciones.Count; i++)
+            {
+                //Console.WriteLine("hora: " + hora);
+                if ((hijo1.lecciones[i].nombre != "Libre") && (primeraHora != 0) && (dia < 7))
+                {
+                    ultimaHora = hora;
+                    cursos++;
+                }
+                else if ((hijo1.lecciones[i].nombre != "Libre") && (primeraHora == 0) && (dia < 7))
+                {
+                    primeraHora = hora;
+                    cursos++;
+                }
+                hora += 2;
+                if (dia == 6)
+                {
+                    Console.WriteLine("Fit del dia: "+ (ultimaHora - primeraHora) / cursos);
+                    if (perfectHit.Contains((ultimaHora - primeraHora) / cursos))
+                    {
+                        Console.WriteLine("It has been a lovely day... XD");
+                    }
+                    fit += (ultimaHora - primeraHora) / cursos;
+                    Console.WriteLine("Fit acumulado: "+fit);
+                    cursos = 0;
+                    dia = 0;
+                    hora = 7;
+                    primeraHora = 0;
+                    ultimaHora = 0;
+                }
+                dia++;
+            }       
+            Console.WriteLine("Total Fit: "+fit);
         }
     }
 }
