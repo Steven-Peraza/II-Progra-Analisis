@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,11 +9,18 @@ namespace II_Progra_Analisis
 {
     class Program
     {
+        public static int asignacionesSimple;
+        public static int comparacionesSimple;
+        public static int asignacionesPMX;
+        public static int comparacionesPMX;
+        public static int asignacionesFitness;
+        public static int comparacionesFitness;
+        static Random rnd = new Random();
         public static Tuple<int[], int[]> CruceSimple(int[] p1, int[] p2)
         {
-
+            
             Tuple<int[], int[]> hijos = C1P(p1, p2);
-
+            asignacionesSimple += 1;
             Console.WriteLine("Hijo 1 : ");
             for (int i = 0; i < p1.Length; i++)
             {
@@ -24,61 +32,72 @@ namespace II_Progra_Analisis
             {
                 Console.Write(hijos.Item2[i] + " ");
             }
-
+            asignacionesSimple += 1;
             return hijos;
 
         }
 
         static Tuple<int[], int[]> C1P(int[] pa1, int[] ma1)
         {
-            Random rnd = new Random();
+            
             int puntoCX = rnd.Next(0, 9);
             Console.WriteLine("Punto de cruce: " + puntoCX);
             int[] h1 = new int[pa1.Length];
             int[] h2 = new int[ma1.Length];
-
-
+            asignacionesSimple += 4;
             for (int i = 0; i < h1.Length; i++)
             {
+                comparacionesSimple += 2;
                 if (i > puntoCX)
                 {
                     h1[i] = ma1[i];
                     h2[i] = pa1[i];
+                    asignacionesSimple += 2;
                 }
                 else
                 {
                     h1[i] = pa1[i];
                     h2[i] = ma1[i];
+                    asignacionesSimple += 2;
                 }
             }
+            asignacionesSimple += 2;
             Tuple<int[], int[]> hijos = new Tuple<int[], int[]>(h1, h2);
             return hijos;
         }
     
     private static int[] PMX2(int[] p1, int[] p2)
         {
-            Random rnd = new Random();
             int punto1 = rnd.Next(0, p1.Length);
             int punto2 = rnd.Next(punto1 + 1, p1.Length);
             int[] h1 = new int[p1.Length];
-            punto1 = 3;
-            punto2 = 6;
+            //punto1 = 3;
+            //punto2 = 6;
             List<int> x = new List<int>();
             List<int> y = new List<int>();
+            asignacionesPMX += 2;
             int index, aux, hostia;
+            asignacionesPMX += 1;
             for (int j = punto1; j < punto2; j++)
             {
                 h1[j] = p1[j];
+                asignacionesPMX += 2;
+                comparacionesPMX += 1;
             }
+            asignacionesPMX += 1;
             for (int v = punto1; v < punto2; v++)
             {
                 index = Array.IndexOf(h1, p2[v]);
                 aux = Array.IndexOf(p2, p2[v]);
+                asignacionesPMX += 1;
                 if (index == -1)
                 {
+                    asignacionesPMX += 2;
                     x.Add(aux);
                     y.Add(h1[v]);
                 }
+                comparacionesPMX += 1;
+                asignacionesPMX += 1;
             }/////
              /*Console.WriteLine("----------------------------");
              for (int n = 0; n < p1.Length; n++)
@@ -87,34 +106,51 @@ namespace II_Progra_Analisis
                  }
                  Console.WriteLine("");
                  /////*/
+            asignacionesPMX += 1;
             for (int c = 0; c < y.Count; c++)
             {
                 //Console.WriteLine(hostia);
                 hostia = Array.IndexOf(p2, y[c]);
+                asignacionesPMX += 1;
                 //Console.WriteLine(hostia);
+                comparacionesPMX += 1;
                 if (hostia == -1)
                 {
                     hostia = Array.IndexOf(p2, h1[0]);
                     //pequenya mutacion
                     h1[y[c]] = p2[x[c]];
                     //continue;
+                    asignacionesPMX += 2;
                 }
 
-                if (h1[hostia] == 0)
+                else if (h1[hostia] == 0)
+                {
+                    comparacionesPMX += 1;
                     h1[hostia] = p2[x[c]];
+                    asignacionesPMX += 1;
+                }
+                    
+                
                 else
                 {
+                    comparacionesPMX += 1;
                     //z.Add(h1[hostia]);
                     hostia = Array.IndexOf(p2, h1[hostia]);
                     h1[hostia] = p2[x[c]];
+                    asignacionesPMX += 2;
                 }
             }
+            asignacionesPMX += 1;
             for (int X = 0; X < h1.Length; X++)
             {
+                comparacionesPMX += 1;
                 if (h1[X] == 0)
                 {
                     h1[X] = p1[X];
+                    asignacionesPMX += 1;
                 }
+                asignacionesPMX += 1;
+                comparacionesPMX += 1;
             }
             //Console.WriteLine("----------------------------");
             /*for (int i = 0; i < h1.Length; i++)
@@ -122,12 +158,15 @@ namespace II_Progra_Analisis
                 Console.Write(h1[i] + " ");
             }
             Console.WriteLine("");*/
-
+            asignacionesPMX += 1;
             return h1;
         }
 
         static void Main(string[] args)
         {
+            Stopwatch crono = new Stopwatch();
+            Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
+            long totalBytesOfMemoryUsed;
             Random rnd = new Random();
             List<Cursos> cursos;
             List<Horario> listaHorarios = new List<Horario>();
@@ -189,7 +228,6 @@ namespace II_Progra_Analisis
 
                 semestre -= 1;
             }
-
             //---------------------------------------------Imprime los horarios--------------------------------------------------------------
             foreach (Horario h in listaHorarios)
             {
@@ -217,16 +255,21 @@ namespace II_Progra_Analisis
             Horario p2 = new Horario();
             Horario h1 = new Horario();
             Horario h2 = new Horario();
+            Horario h3 = new Horario();
+            Horario h4 = new Horario();
             List<Cursos> l1 = new List<Cursos>();
             List<Cursos> l2 = new List<Cursos>();
 
             List<Horario> listaHorariosPMX = new List<Horario>();
+            List<Horario> listaHorariosSimple = new List<Horario>();
             for (int i = 0; i < listaHorarios[0].cursos.Count; i++)
             {
                 l1.Add(listaHorarios[0].cursos[i]);
                 l2.Add(listaHorarios[0].cursos[i]);
                 h1.cursos.Add(listaHorarios[0].cursos[i]);
                 h2.cursos.Add(listaHorarios[0].cursos[i]);
+                h3.cursos.Add(listaHorarios[0].cursos[i]);
+                h4.cursos.Add(listaHorarios[0].cursos[i]);
             }
 
             p1.cursos = l1;
@@ -236,12 +279,14 @@ namespace II_Progra_Analisis
             Console.WriteLine();
 
             listaHorariosPMX.Add(p1);
+            listaHorariosSimple.Add(p1);
 
             p2.cursos = l2;
             p2.llenaLecciones();
             p2.DesordenarLista();
             p2.DesordenarLista();
             listaHorariosPMX.Add(p2);
+            listaHorariosSimple.Add(p2);
 
             int[] pruebaP1 = new int[p1.lecciones.Count];
             int[] pruebaP2 = new int[p1.lecciones.Count];
@@ -252,7 +297,7 @@ namespace II_Progra_Analisis
             }
 
             Console.WriteLine("-------------------------------------------Prueba PMX-------------------------------------");
-
+            crono.Start();
             int[] pruebaPMX = PMX2(pruebaP1, pruebaP2);
             int[] pruebaPMX2 = PMX2(pruebaP2, pruebaP1);
             for (int i = 0; i < pruebaPMX.Length; i++)
@@ -275,6 +320,7 @@ namespace II_Progra_Analisis
             //h1.llenaHorario();
             listaHorariosPMX.Add(h1);
             listaHorariosPMX.Add(h2);
+            
             /*for (int i = 0; i < prueba1.Length; i++)
             {
                 Console.Write(prueba1[i]+"-");
@@ -292,6 +338,17 @@ namespace II_Progra_Analisis
             Console.WriteLine();
             */
 
+
+
+            Tuple<Horario, Horario> nuevaGenPMX = fitnessAux(p1, p2, h1, h2);
+            nuevaGenPMX.Item1.llenaHorario();
+            nuevaGenPMX.Item2.llenaHorario();
+
+
+            //OJO CON ESTO///////////////////////
+            totalBytesOfMemoryUsed = currentProcess.WorkingSet64;
+            /////////////////////////////////////
+            crono.Stop();
             foreach (Horario h in listaHorariosPMX)
             {
                 foreach (Cursos cur in h.lecciones)
@@ -301,15 +358,51 @@ namespace II_Progra_Analisis
                 Console.WriteLine();
                 Console.WriteLine("-------------------------PMX-------------------------");
             }
-           // Console.WriteLine("-------------------------------------------Prueba Simple-------------------------------------");
+            Console.WriteLine("Tiempo Transcurrido: " + crono.Elapsed + " ms");
+            Console.WriteLine("Cantidad de memoria utilizada: " + totalBytesOfMemoryUsed / 1000000 + " MB");
+            Console.ReadKey();
+            Console.WriteLine(" ");
+            int horaa = 7;
+            Console.WriteLine("\t" + "Lunes" + "\t" + "Martes" + "\t" + "Mierco" + "\t" + "Jueves" + "\t" + "Viernes");
+            for (int i = 0; i < 6; i++)
+            {
+                Console.Write(horaa + ":00" + "\t");
+                for (int k = 0; k < 5; k++)
+                {
+                    Cursos a = nuevaGenPMX.Item1.matriz[k, i];
+                    Console.Write(a.nombre + a.nleccion + "\t");
+                }
+                horaa += 2;
+                Console.WriteLine();
+            }
+            Console.WriteLine("-------------------------cambio semestre-------------------------");
+            horaa = 7;
+            Console.WriteLine("\t" + "Lunes" + "\t" + "Martes" + "\t" + "Mierco" + "\t" + "Jueves" + "\t" + "Viernes");
+            for (int i = 0; i < 6; i++)
+            {
+                Console.Write(horaa + ":00" + "\t");
+                for (int k = 0; k < 5; k++)
+                {
+                    Cursos a = nuevaGenPMX.Item2.matriz[k, i];
+                    Console.Write(a.nombre + a.nleccion + "\t");
+                }
+                horaa += 2;
+                Console.WriteLine();
+            }
+            Console.WriteLine("-------------------------cambio semestre-------------------------");
 
-            /*Tuple<int[],int[]> pruebaSimple = CruceSimple(pruebaP1, pruebaP2);
+            Console.WriteLine();
+
+            Console.ReadKey();
+            // Console.WriteLine("-------------------------------------------Prueba Simple-------------------------------------");
+            crono.Start();
+            Tuple<int[], int[]> pruebaSimple = CruceSimple(pruebaP1, pruebaP2);
             for (int i = 0; i < pruebaSimple.Item1.Length; i++)
             {
                 foreach (Cursos c in listaHorarios[0].lecciones)
                 {
                     if (c.nleccion == pruebaPMX[i])
-                        h1.lecciones.Add(c);
+                        h3.lecciones.Add(c);
                 }
             }
             for (int i = 0; i < pruebaSimple.Item2.Length; i++)
@@ -317,39 +410,60 @@ namespace II_Progra_Analisis
                 foreach (Cursos c in listaHorarios[0].lecciones)
                 {
                     if (c.nleccion == pruebaPMX2[i])
-                        h2.lecciones.Add(c);
+                        h4.lecciones.Add(c);
                 }
-            }*/
+            }
+            listaHorariosSimple.Add(h3);
+            listaHorariosSimple.Add(h4);
 
-            Tuple<Horario, Horario> nuevaGen = fitnessAux(p1, p2, h1, h2);
+            Tuple<Horario, Horario> nuevaGenSimple = fitnessAux(p1, p2, h1, h2);
+            nuevaGenSimple.Item1.llenaHorario();
+            nuevaGenSimple.Item2.llenaHorario();
 
-            int hora1 = 7;
-            Console.WriteLine("-----------------------Hijo1-----------------");
+            //OJO CON ESTO///////////////////////
+            totalBytesOfMemoryUsed = currentProcess.WorkingSet64;
+            /////////////////////////////////////
+            crono.Stop();
+            Console.WriteLine("Tiempo Transcurrido: " + crono.Elapsed + " ms");
+            Console.WriteLine("Cantidad de memoria utilizada: " + totalBytesOfMemoryUsed / 1000000 + " MB");
+            Console.ReadKey();
+            Console.WriteLine(" ");
+
+            horaa = 7;
             Console.WriteLine("\t" + "Lunes" + "\t" + "Martes" + "\t" + "Mierco" + "\t" + "Jueves" + "\t" + "Viernes");
             for (int i = 0; i < 6; i++)
             {
-                Console.Write(hora1 + ":00" + "\t");
-                Console.Write(nuevaGen.Item1.lecciones[i].nombre + "\t" + nuevaGen.Item1.lecciones[i+6].nombre + "\t"+ nuevaGen.Item1.lecciones[i+12].nombre + "\t"+nuevaGen.Item1.lecciones[i+18].nombre + "\t"+ nuevaGen.Item1.lecciones[i+24].nombre + "\t");
-
-                hora1 += 2;
+                Console.Write(horaa + ":00" + "\t");
+                for (int k = 0; k < 5; k++)
+                {
+                    Cursos a = nuevaGenSimple.Item1.matriz[k, i];
+                    Console.Write(a.nombre + a.nleccion + "\t");
+                }
+                horaa += 2;
                 Console.WriteLine();
             }
-
-            hora1 = 7;
-            Console.WriteLine("-----------------------Hijo2-----------------");
+            Console.WriteLine("-------------------------cambio semestre-------------------------");
+            horaa = 7;
             Console.WriteLine("\t" + "Lunes" + "\t" + "Martes" + "\t" + "Mierco" + "\t" + "Jueves" + "\t" + "Viernes");
             for (int i = 0; i < 6; i++)
             {
-                Console.Write(hora1 + ":00" + "\t");
-                Console.Write(nuevaGen.Item2.lecciones[i].nombre + "\t" + nuevaGen.Item2.lecciones[i + 6].nombre + "\t" + nuevaGen.Item2.lecciones[i + 12].nombre + "\t" + nuevaGen.Item2.lecciones[i + 18].nombre + "\t" + nuevaGen.Item2.lecciones[i + 24].nombre + "\t");
-
-                hora1 += 2;
+                Console.Write(horaa + ":00" + "\t");
+                for (int k = 0; k < 5; k++)
+                {
+                    Cursos a = nuevaGenSimple.Item2.matriz[k, i];
+                    Console.Write(a.nombre + a.nleccion + "\t");
+                }
+                horaa += 2;
                 Console.WriteLine();
             }
+            Console.WriteLine("-------------------------cambio semestre-------------------------");
 
             Console.WriteLine();
-            
+
             Console.ReadKey();
+
+
+
         }
 
         public static double Fitness(Horario hijo1)
@@ -358,37 +472,51 @@ namespace II_Progra_Analisis
             double[] perfectHit = { 1.6, 1.5, 1.33333333333333333333, 1 };
             double fit = 0;
             double ultimaHora = 0, primeraHora = 0, cursos = 0, hora = 7, dia = 0, hitCombo = 0;
+            asignacionesFitness += 9;
             for (int i = 0; i < hijo1.lecciones.Count; i++)
             {
                 //Console.WriteLine("hora: " + hora);
+                comparacionesFitness += 2;
                 if ((hijo1.lecciones[i].nombre != "Libre") && (primeraHora != 0) && (dia < 7))
                 {
                     ultimaHora = hora;
                     cursos++;
+                    asignacionesFitness += 2;
                 }
                 else if ((hijo1.lecciones[i].nombre != "Libre") && (primeraHora == 0) && (dia < 7))
                 {
                     primeraHora = hora;
                     cursos++;
+                    asignacionesFitness += 2;
                 }
+                comparacionesFitness += 2;
                 hora += 2;
+                asignacionesFitness += 1;
+                comparacionesFitness += 1;
                 if (dia == 6)
                 {
                     Console.WriteLine("Fit del dia: "+ (ultimaHora - primeraHora) / cursos);
+                    comparacionesFitness += 4;
                     if (perfectHit.Contains((ultimaHora - primeraHora) / cursos))
                     {
                         hitCombo++;
                         Console.WriteLine("It has been a lovely day... XD");
+                        asignacionesFitness += 1;
                     }
                     fit += (ultimaHora - primeraHora) / cursos;
+                    asignacionesFitness += 1;
                     Console.WriteLine("Fit acumulado: "+fit);
                     cursos = 0;
                     dia = 0;
                     hora = 7;
                     primeraHora = 0;
                     ultimaHora = 0;
+                    asignacionesFitness += 5;
                 }
                 dia++;
+                asignacionesFitness += 2;
+                comparacionesPMX += 1;
+                asignacionesFitness += 3;
             }
             if(hitCombo == 5)
             {
@@ -396,6 +524,7 @@ namespace II_Progra_Analisis
             }
             //Console.WriteLine("Total Fit: "+fit);
             Console.WriteLine("-------------------------");
+            asignacionesFitness += 1;
             return fit;
         }
 
@@ -405,9 +534,11 @@ namespace II_Progra_Analisis
             double fitP2 = Fitness(z2);
             double fitH1 = Fitness(z3);
             double fitH2 = Fitness(z4);
+            
 
             List<Horario> bestH = new List<Horario>();
             //Horario best2 = new Horario();
+            asignacionesFitness += 5;
 
             Console.WriteLine("Fit del padre 1: " + fitP1);
             Console.WriteLine("Fit del padre 2: " + fitP2);
@@ -422,37 +553,51 @@ namespace II_Progra_Analisis
                 fitP1 = 5;
             if (fitP2 < 0)
                 fitP2 = 5;
+            asignacionesFitness = +4;
+            comparacionesFitness += 4;
 
             if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 >= fitH2) && (fitP2 >= fitH2))
             {
                 bestH.Add(z3);
                 bestH.Add(z4);
+                comparacionesFitness += 4;
+                asignacionesFitness += 2;
             }
             else if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 < fitH2) && (fitP2 >= fitH2))
             {
-                bestH.Add(z3);
                 bestH.Add(z1);
+                bestH.Add(z3);
+                comparacionesFitness += 8;
+                asignacionesFitness += 2;
             }
 
             else if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 >= fitH2) && (fitP2 < fitH2))
             {
-                bestH.Add(z3);
                 bestH.Add(z2);
+                bestH.Add(z3);
+                comparacionesFitness += 12;
+                asignacionesFitness += 2;
             }
             else if ((fitP1 < fitH1) && (fitP2 >= fitH1) && (fitP1 >= fitH2) && (fitP2 >= fitH2))
             {
-                bestH.Add(z4);
                 bestH.Add(z1);
+                bestH.Add(z4);
+                comparacionesFitness += 16;
+                asignacionesFitness += 2;
             }
             else if ((fitP1 >= fitH1) && (fitP2 < fitH1) && (fitP1 >= fitH2) && (fitP2 >= fitH2))
             {
-                bestH.Add(z4);
                 bestH.Add(z2);
+                bestH.Add(z4);
+                comparacionesFitness += 20;
+                asignacionesFitness += 2;
             }
             else
             {
                 bestH.Add(z1);
                 bestH.Add(z2);
+                comparacionesFitness += 24;
+                asignacionesFitness += 2;
             }
 
 
