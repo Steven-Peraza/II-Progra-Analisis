@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,11 @@ namespace PMX
     {
         static void Main(string[] args)
         {
+            //lo que mide la memoria
+            Stopwatch crono = new Stopwatch();
+            Process currentProcess = System.Diagnostics.Process.GetCurrentProcess();
+
+            crono.Start();
             int[] p1 = new int[10];
             int[] p2 = new int[10];
 
@@ -31,7 +37,12 @@ namespace PMX
             Console.WriteLine("");*/
 
             generachons(p3, p4, 0);
-
+            //OJO CON ESTO///////////////////////
+            long totalBytesOfMemoryUsed = currentProcess.WorkingSet64;
+            /////////////////////////////////////
+            crono.Stop();
+            Console.WriteLine("Tiempo Transcurrido: "+ crono.Elapsed + " ms");
+            Console.WriteLine("Cantidad de memoria utilizada: "+totalBytesOfMemoryUsed/1000000 + " MB");
             Console.ReadKey();
         }
 
