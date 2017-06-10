@@ -125,7 +125,7 @@ namespace II_Progra_Analisis
 
             return h1;
         }
-        
+
         static void Main(string[] args)
         {
             Random rnd = new Random();
@@ -137,7 +137,7 @@ namespace II_Progra_Analisis
             //---------------------------------------------Crea los profesores---------------------------------------------------------------
             for (int i = 0; i < 20; i++)
             {
-                listaProfes.Add(new Profes(i + 1, "Profe" + ((i + 1)), (rnd.Next(1, 8))*2));
+                listaProfes.Add(new Profes(i + 1, "Profe" + ((i + 1)), (rnd.Next(1, 8)) * 2));
             }
 
             //---------------------------------------------Construye el horario--------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace II_Progra_Analisis
             int cont2 = 1;
             int vecesEnSemana;
             int semestre = 6;
-            while(semestre != 0)//Crea horarios la cantidad de semestres establecida
+            while (semestre != 0)//Crea horarios la cantidad de semestres establecida
             {
                 int horas = 60;// Cantidad de horas de posibles clases incluidads las libres
                 int libres = rnd.Next(10, 15);//Un random de la cantidad de libres que tendra el horario
@@ -154,10 +154,10 @@ namespace II_Progra_Analisis
                 horario = new Horario();
                 for (int i = 0; i < libres; i++)//Añade las libres a cursos
                 {
-                    cursos.Add(new Cursos(cont,"Libre"));
+                    cursos.Add(new Cursos(cont, "Libre"));
                     cont += 1;
                 }
-                
+
                 while (horas != 0)//Se le iran restando hasta que llegue a 0 para saber que ya no hay mas posibles clases
                 {
                     //(int ID, int nEstudiantes, String nombre, Aulas aula, int nClases,int semestre,Profes profe,int grupo)
@@ -193,18 +193,18 @@ namespace II_Progra_Analisis
             //---------------------------------------------Imprime los horarios--------------------------------------------------------------
             foreach (Horario h in listaHorarios)
             {
-            int hora = 7;
-            Console.WriteLine("\t"+"Lunes"+ "\t"+ "Martes"+ "\t"+"Mierco"+ "\t"+"Jueves"+ "\t"+"Viernes");
+                int hora = 7;
+                Console.WriteLine("\t" + "Lunes" + "\t" + "Martes" + "\t" + "Mierco" + "\t" + "Jueves" + "\t" + "Viernes");
                 for (int i = 0; i < 6; i++)
-                {    
-                Console.Write(hora+":00"+ "\t");
+                {
+                    Console.Write(hora + ":00" + "\t");
                     for (int k = 0; k < 5; k++)
                     {
-                    Cursos a = h.matriz[k, i];
-                    if (a.nombre != "Libre")
-                        Console.Write(a.nombre+"\t");
-                    else
-                        Console.Write("Libre"+ "\t");
+                        Cursos a = h.matriz[k, i];
+                        if (a.nombre != "Libre")
+                            Console.Write(a.nombre + "\t");
+                        else
+                            Console.Write("Libre" + "\t");
                     }
                     hora += 2;
                     Console.WriteLine();
@@ -219,7 +219,7 @@ namespace II_Progra_Analisis
             Horario h2 = new Horario();
             List<Cursos> l1 = new List<Cursos>();
             List<Cursos> l2 = new List<Cursos>();
-            
+
             List<Horario> listaHorariosPMX = new List<Horario>();
             for (int i = 0; i < listaHorarios[0].cursos.Count; i++)
             {
@@ -232,9 +232,9 @@ namespace II_Progra_Analisis
             p1.cursos = l1;
             p1.llenaLecciones();
             p1.DesordenarLista();
-            
+
             Console.WriteLine();
-            
+
             listaHorariosPMX.Add(p1);
 
             p2.cursos = l2;
@@ -243,17 +243,17 @@ namespace II_Progra_Analisis
             p2.DesordenarLista();
             listaHorariosPMX.Add(p2);
 
-            int []pruebaP1 = new int [p1.lecciones.Count];
+            int[] pruebaP1 = new int[p1.lecciones.Count];
             int[] pruebaP2 = new int[p1.lecciones.Count];
             for (int i = 0; i < p1.lecciones.Count; i++)
             {
                 pruebaP1[i] = p1.lecciones[i].nleccion;
                 pruebaP2[i] = p2.lecciones[i].nleccion;
             }
-            
+
             Console.WriteLine("-------------------------------------------Prueba PMX-------------------------------------");
-            
-            int[] pruebaPMX = PMX2(pruebaP1,pruebaP2);
+
+            int[] pruebaPMX = PMX2(pruebaP1, pruebaP2);
             int[] pruebaPMX2 = PMX2(pruebaP2, pruebaP1);
             for (int i = 0; i < pruebaPMX.Length; i++)
             {
@@ -296,14 +296,14 @@ namespace II_Progra_Analisis
             {
                 foreach (Cursos cur in h.lecciones)
                 {
-                    Console.Write(cur.nleccion+"-");
+                    Console.Write(cur.nleccion + "-");
                 }
                 Console.WriteLine();
                 Console.WriteLine("-------------------------PMX-------------------------");
             }
-            Console.WriteLine("-------------------------------------------Prueba Simple-------------------------------------");
+           // Console.WriteLine("-------------------------------------------Prueba Simple-------------------------------------");
 
-            Tuple<int[],int[]> pruebaSimple = CruceSimple(pruebaP1, pruebaP2);
+            /*Tuple<int[],int[]> pruebaSimple = CruceSimple(pruebaP1, pruebaP2);
             for (int i = 0; i < pruebaSimple.Item1.Length; i++)
             {
                 foreach (Cursos c in listaHorarios[0].lecciones)
@@ -319,21 +319,36 @@ namespace II_Progra_Analisis
                     if (c.nleccion == pruebaPMX2[i])
                         h2.lecciones.Add(c);
                 }
-            }
-            Console.WriteLine(" ");
+            }*/
 
-            Tuple<Horario, Horario> nuevaGen = fitnessAux(p1,p2,h1,h2);
-            for (int i = 0; i < nuevaGen.Item1.lecciones.Count; i++)
-            {
-                Console.WriteLine(nuevaGen.Item1.lecciones[i].nombre);
-            }
-            Console.WriteLine("--------------------------------------");
+            Tuple<Horario, Horario> nuevaGen = fitnessAux(p1, p2, h1, h2);
 
-            for (int i = 0; i < nuevaGen.Item2.lecciones.Count; i++)
+            int hora1 = 7;
+            Console.WriteLine("-----------------------Hijo1-----------------");
+            Console.WriteLine("\t" + "Lunes" + "\t" + "Martes" + "\t" + "Mierco" + "\t" + "Jueves" + "\t" + "Viernes");
+            for (int i = 0; i < 6; i++)
             {
-                Console.WriteLine(nuevaGen.Item2.lecciones[i].nombre);
+                Console.Write(hora1 + ":00" + "\t");
+                Console.Write(nuevaGen.Item1.lecciones[i].nombre + "\t" + nuevaGen.Item1.lecciones[i+6].nombre + "\t"+ nuevaGen.Item1.lecciones[i+12].nombre + "\t"+nuevaGen.Item1.lecciones[i+18].nombre + "\t"+ nuevaGen.Item1.lecciones[i+24].nombre + "\t");
+
+                hora1 += 2;
+                Console.WriteLine();
             }
+
+            hora1 = 7;
+            Console.WriteLine("-----------------------Hijo2-----------------");
+            Console.WriteLine("\t" + "Lunes" + "\t" + "Martes" + "\t" + "Mierco" + "\t" + "Jueves" + "\t" + "Viernes");
+            for (int i = 0; i < 6; i++)
+            {
+                Console.Write(hora1 + ":00" + "\t");
+                Console.Write(nuevaGen.Item2.lecciones[i].nombre + "\t" + nuevaGen.Item2.lecciones[i + 6].nombre + "\t" + nuevaGen.Item2.lecciones[i + 12].nombre + "\t" + nuevaGen.Item2.lecciones[i + 18].nombre + "\t" + nuevaGen.Item2.lecciones[i + 24].nombre + "\t");
+
+                hora1 += 2;
+                Console.WriteLine();
+            }
+
             Console.WriteLine();
+            
             Console.ReadKey();
         }
 
@@ -399,13 +414,40 @@ namespace II_Progra_Analisis
             Console.WriteLine("Fit del hijo 1: "+ fitH1);
             Console.WriteLine("Fit del hijo 2: "+ fitH2);
 
-            if ((fitP1 >= fitH1) && (fitP2 >= fitH1))
+            if (fitH1 < 0)
+                fitH1 = 5;
+            if (fitH2 < 0)
+                fitH2 = 5;
+            if (fitP1 < 0)
+                fitP1 = 5;
+            if (fitP2 < 0)
+                fitP2 = 5;
+
+            if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 >= fitH2) && (fitP2 >= fitH2))
             {
                 bestH.Add(z3);
+                bestH.Add(z4);
             }
-            else if ((fitP1 >= fitH1) && (fitP2 >= fitH1))
+            else if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 < fitH2) && (fitP2 >= fitH2))
+            {
+                bestH.Add(z3);
+                bestH.Add(z1);
+            }
+
+            else if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 >= fitH2) && (fitP2 < fitH2))
+            {
+                bestH.Add(z3);
+                bestH.Add(z2);
+            }
+            else if ((fitP1 < fitH1) && (fitP2 >= fitH1) && (fitP1 >= fitH2) && (fitP2 >= fitH2))
             {
                 bestH.Add(z4);
+                bestH.Add(z1);
+            }
+            else if ((fitP1 >= fitH1) && (fitP2 < fitH1) && (fitP1 >= fitH2) && (fitP2 >= fitH2))
+            {
+                bestH.Add(z4);
+                bestH.Add(z2);
             }
             else
             {
