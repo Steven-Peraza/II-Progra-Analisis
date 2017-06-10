@@ -10,40 +10,24 @@ namespace II_Progra_Analisis
     {
         public Cursos[,] matriz = new Cursos[5,6];//Matriz dia x hora
         public List<Cursos> cursos = new List<Cursos>();
+        public List<Cursos> lecciones = new List<Cursos>();
 
         public void llenaHorario()//Pasa la lista de cursos a matriz referenciado a las horas y los dias
         {
-            cursos = DesordenarLista(cursos);
             int cont = 0;
             for (int i = 0; i < 5; i++)
             {
                 for (int k = 0; k < 6; k++)
                 {
-                    Cursos cursoActual = cursos[cont];
-                    matriz[i, k] = cursoActual;
-                    if (cursos[cont].nClases == 2)
-                    {
-                        Cursos cursoAux = new Cursos(cursoActual.ID, cursoActual.nEstudiantes, cursoActual.nombre, null, cursoActual.nClases, cursoActual.semestre, null, cursoActual.grupo);
-                        k += 1;
-                        if (k == 6)
-                        {
-                            k = 0;
-                            i += 1;
-                            if (i == 5)
-                            {
-                                return;
-                            }
-                        }
-                        matriz[i, k] = cursoAux;
-                    }
+                    //lecciones[cont].nleccion = cont + 1;
+                    matriz[i,k] = lecciones[cont];
                     cont += 1;
-
-                }
+                }  
             }
         }
-        public List<Cursos> DesordenarLista(List<Cursos> input)
+        public void DesordenarLista()
         {
-            List<Cursos> arr = input;
+            List<Cursos> arr = lecciones;
             List<Cursos> arrDes = new List<Cursos>();
 
             Random randNum = new Random();
@@ -53,7 +37,31 @@ namespace II_Progra_Analisis
                 arrDes.Add(arr[val]);
                 arr.RemoveAt(val);
             }
-            return arrDes;
+            lecciones = arrDes;
+            llenaHorario();
+        }
+        public void llenaLecciones()
+        {
+            int cont = 1;
+            Cursos cursoActual;
+            Cursos cursoAux;
+            
+            for (int i = 0; i < cursos.Count; i++)
+            {
+                cursoActual = cursos[i];
+                cursoAux = new Cursos(cursoActual.ID, cursoActual.nEstudiantes, cursoActual.nombre, null, cursoActual.nClases, cursoActual.semestre, null, cursoActual.grupo);
+                cursoAux.nleccion = cont;
+                lecciones.Add(cursoAux);
+                cont += 1;
+                if (cursoActual.nClases == 2)
+                {
+                    cursoAux = new Cursos(cursoActual.ID, cursoActual.nEstudiantes, cursoActual.nombre, null, cursoActual.nClases, cursoActual.semestre, null, cursoActual.grupo);
+                    cursoAux.nleccion = cont;
+                    lecciones.Add(cursoAux);
+                    cont += 1;
+                }
+            }
+            llenaHorario();
         }
     }
 }
