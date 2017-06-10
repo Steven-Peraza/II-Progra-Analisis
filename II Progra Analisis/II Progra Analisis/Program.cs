@@ -16,11 +16,14 @@ namespace II_Progra_Analisis
         public static int asignacionesFitness;
         public static int comparacionesFitness;
         static Random rnd = new Random();
+
+        //funcion auxiliar para cruzar en un punto
         public static Tuple<int[], int[]> CruceSimple(int[] p1, int[] p2)
         {
-            
+            //recibe la tupla rertornada por la funcion de cruce en un punto
             Tuple<int[], int[]> hijos = C1P(p1, p2);
             asignacionesSimple += 1;
+            //Imprime ambos hijos
             Console.WriteLine("Hijo 1 : ");
             for (int i = 0; i < p1.Length; i++)
             {
@@ -43,6 +46,8 @@ namespace II_Progra_Analisis
             //se crea el random para determinar un punto aleatorio de cruce
             Random rnd = new Random();
             int puntoCX = rnd.Next(0, 9);
+            //porcentaje de aparicion de mutacion
+            int porcenMut = rnd.Next(1, 100);
             Console.WriteLine("Punto de cruce: " + puntoCX);
             //se crean dos hijos del mismo tamanyo de los padres
             int[] h1 = new int[pa1.Length];
@@ -52,20 +57,44 @@ namespace II_Progra_Analisis
                 //ciclo que cruza ambos padres para obtener a los hijos correspondientes.
             for (int i = 0; i < h1.Length; i++)
             {
-                comparacionesSimple += 2;
+                    comparacionesSimple += 2;
                 //si ya se paso al punto de cruce, entonces se mezclan los padres en los hijos
                 if (i > puntoCX)
                 {
-                    h1[i] = ma1[i];
-                    h2[i] = pa1[i];
-                    asignacionesSimple += 2;
+                    //mutacion que cambia de lugar un alelo
+                    if (porcenMut <= 5)
+                    {
+                        h1[i] = pa1[i];
+                        h2[i] = ma1[i];
+                        comparacionesSimple ++;
+                        asignacionesSimple += 2;
+                    }
+                    else
+                    {
+                        h1[i] = ma1[i];
+                        h2[i] = pa1[i];
+                        asignacionesSimple += 2;
+                    }
+                    
                 }
                 //sino, solo se copian directamente al hijo
                 else
                 {
-                    h1[i] = pa1[i];
-                    h2[i] = ma1[i];
-                    asignacionesSimple += 2;
+                    //mutacion que cambia de lugar un alelo
+                    if (porcenMut <= 5)
+                    {
+                        h1[i] = ma1[i];
+                        h2[i] = pa1[i];
+                        comparacionesSimple++;
+                        asignacionesSimple += 2;
+                    }
+                    else
+                    {
+                        h1[i] = pa1[i];
+                        h2[i] = ma1[i];
+                        asignacionesSimple += 2;
+                    }
+                    
                 }
             }
             //se crea una tupla para retornar ambos hijos ya cruzados
@@ -144,7 +173,7 @@ namespace II_Progra_Analisis
 
                 asignacionesPMX += 1;
                 comparacionesPMX += 1;
-                if (porcenMut <= 50)
+                if (porcenMut <= 5)
                 {
                     //pequenya mutacion
                     Console.WriteLine("Mutando el curso {0} en la posicion {1}", h1[y[c]],hostia);
@@ -624,16 +653,16 @@ namespace II_Progra_Analisis
             }
             else if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 < fitH2) && (fitP2 >= fitH2))
             {
-                bestH.Add(z1);
                 bestH.Add(z3);
+                bestH.Add(z1);
                 comparacionesFitness += 8;
                 asignacionesFitness += 2;
             }
 
             else if ((fitP1 >= fitH1) && (fitP2 >= fitH1) && (fitP1 >= fitH2) && (fitP2 < fitH2))
             {
-                bestH.Add(z2);
                 bestH.Add(z3);
+                bestH.Add(z2);
                 comparacionesFitness += 12;
                 asignacionesFitness += 2;
             }
