@@ -11,6 +11,7 @@ namespace II_Progra_Analisis
         public Cursos[,] matriz = new Cursos[5,6];//Matriz dia x hora
         public List<Cursos> cursos = new List<Cursos>();
         public List<Cursos> lecciones = new List<Cursos>();
+        public double fitness = 0;
 
         public void llenaHorario()//Pasa la lista de cursos a matriz referenciado a las horas y los dias
         {

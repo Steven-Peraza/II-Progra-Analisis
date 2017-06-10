@@ -322,16 +322,27 @@ namespace II_Progra_Analisis
             }
             Console.WriteLine(" ");
 
-            Fitness(p1);
-            
+            Tuple<Horario, Horario> nuevaGen = fitnessAux(p1,p2,h1,h2);
+            for (int i = 0; i < nuevaGen.Item1.lecciones.Count; i++)
+            {
+                Console.WriteLine(nuevaGen.Item1.lecciones[i].nombre);
+            }
+            Console.WriteLine("--------------------------------------");
+
+            for (int i = 0; i < nuevaGen.Item2.lecciones.Count; i++)
+            {
+                Console.WriteLine(nuevaGen.Item2.lecciones[i].nombre);
+            }
+            Console.WriteLine();
             Console.ReadKey();
         }
 
-        public static void Fitness(Horario hijo1/*, Cursos[] hijo2*/)
+        public static double Fitness(Horario hijo1)
         {
-            double[] perfectHit = { 1.6, 1.5, 1.33, 1 };
+            Console.WriteLine("------------------------------------------");
+            double[] perfectHit = { 1.6, 1.5, 1.33333333333333333333, 1 };
             double fit = 0;
-            double ultimaHora = 0, primeraHora = 0, cursos = 0, hora = 7, dia = 0;
+            double ultimaHora = 0, primeraHora = 0, cursos = 0, hora = 7, dia = 0, hitCombo = 0;
             for (int i = 0; i < hijo1.lecciones.Count; i++)
             {
                 //Console.WriteLine("hora: " + hora);
@@ -351,6 +362,7 @@ namespace II_Progra_Analisis
                     Console.WriteLine("Fit del dia: "+ (ultimaHora - primeraHora) / cursos);
                     if (perfectHit.Contains((ultimaHora - primeraHora) / cursos))
                     {
+                        hitCombo++;
                         Console.WriteLine("It has been a lovely day... XD");
                     }
                     fit += (ultimaHora - primeraHora) / cursos;
@@ -362,8 +374,48 @@ namespace II_Progra_Analisis
                     ultimaHora = 0;
                 }
                 dia++;
-            }       
-            Console.WriteLine("Total Fit: "+fit);
+            }
+            if(hitCombo == 5)
+            {
+                Console.WriteLine("Horario Perfecto, la PTM!!!!");
+            }
+            //Console.WriteLine("Total Fit: "+fit);
+            Console.WriteLine("-------------------------");
+            return fit;
+        }
+
+        public static Tuple<Horario, Horario> fitnessAux(Horario z1, Horario z2,Horario z3, Horario z4)
+        {
+            double fitP1 = Fitness(z1);
+            double fitP2 = Fitness(z2);
+            double fitH1 = Fitness(z3);
+            double fitH2 = Fitness(z4);
+
+            List<Horario> bestH = new List<Horario>();
+            //Horario best2 = new Horario();
+
+            Console.WriteLine("Fit del padre 1: " + fitP1);
+            Console.WriteLine("Fit del padre 2: " + fitP2);
+            Console.WriteLine("Fit del hijo 1: "+ fitH1);
+            Console.WriteLine("Fit del hijo 2: "+ fitH2);
+
+            if ((fitP1 >= fitH1) && (fitP2 >= fitH1))
+            {
+                bestH.Add(z3);
+            }
+            else if ((fitP1 >= fitH1) && (fitP2 >= fitH1))
+            {
+                bestH.Add(z4);
+            }
+            else
+            {
+                bestH.Add(z1);
+                bestH.Add(z2);
+            }
+
+
+            Tuple<Horario, Horario> bestGen = new Tuple<Horario, Horario>(bestH[0], bestH[1]);
+            return bestGen;
         }
     }
 }
